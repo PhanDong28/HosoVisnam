@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kiểm Tra Hồ Sơ CTS · Visnam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #0f4c81;
+  --primary-light: #1565c0;
+  --primary-dim: #e8f0fe;
+  --accent: #0ea5e9;
+  --accent-soft: #e0f2fe;
+  --success: #16a34a;
+  --success-bg: #f0fdf4;
+  --success-border: #bbf7d0;
+  --danger: #dc2626;
+  --danger-bg: #fef2f2;
+  --danger-border: #fecaca;
+  --warn: #d97706;
+  --warn-bg: #fffbeb;
+  --warn-border: #fde68a;
+  --bg: #f1f5f9;
+  --surface: #ffffff;
+  --surface2: #f8fafc;
+  --border: #e2e8f0;
+  --border2: #cbd5e1;
+  --text: #0f172a;
+  --text2: #475569;
+  --text3: #94a3b8;
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'Be Vietnam Pro', sans-serif;
+  --r: 10px;
+  --r-sm: 6px;
+  --shadow: 0 1px 4px rgba(15,76,129,0.07);
+  --shadow-md: 0 4px 16px rgba(15,76,129,0.12);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+header {
+  background: var(--primary);
+  color: #fff;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: -0.3px;
+}
+.logo-sq {
+  width: 30px; height: 30px;
+  background: var(--accent);
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px;
+}
+.hbadge {
+  font-size: 11px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+/* ── LAYOUT ── */
+.app {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 22px 20px 60px;
+}
+
+/* ── STEP NAV ── */
+.steps {
+  display: flex;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 12px 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+  gap: 0;
+  overflow-x: auto;
+}
+.si {
+  flex: 1;
+  min-width: 140px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 10px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: background .2s;
+}
+.si:hover { background: var(--bg); }
+.si.active .snum { background: var(--primary); color: #fff; }
+.si.active .slabel { color: var(--primary); font-weight: 600; }
+.si.done .snum { background: var(--success); color: #fff; }
+.snum {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--border);
+  color: var(--text3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--mono);
+  flex-shrink: 0;
+  transition: all .3s;
+}
+.slabel { font-size: 12px; color: var(--text2); line-height: 1.3; }
+.ssep { color: var(--border2); font-size: 18px; margin: 0 2px; flex-shrink: 0; }
+
+/* ── GRID ── */
+.grid-main {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 18px;
+  align-items: start;
+}
+@media (max-width: 860px) { .grid-main { grid-template-columns: 1fr; } }
+
+/* ── CARD ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.card-last { margin-bottom: 0; }
+.ch {
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.ch h3 { font-size: 13px; font-weight: 600; }
+.ch p { font-size: 11px; color: var(--text3); margin-top: 1px; }
+.ci {
+  width: 30px; height: 30px;
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+.cb { padding: 16px 18px; }
+
+/* ── UPLOAD ZONE ── */
+.uz {
+  border: 1.5px dashed var(--border2);
+  border-radius: var(--r-sm);
+  padding: 22px 16px;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  transition: all .2s;
+  background: var(--surface2);
+}
+.uz:hover, .uz.drag { border-color: var(--accent); background: var(--accent-soft); }
+.uz.ok { border-color: var(--success); background: var(--success-bg); }
+.uz input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
+.uz-ico { font-size: 22px; margin-bottom: 5px; }
+.uz-lbl { font-size: 12px; font-weight: 600; color: var(--text); }
+.uz-hint { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.ftag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--success-bg);
+  border: 1px solid var(--success-border);
+  color: var(--success);
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+  margin-top: 6px;
+}
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.stitle { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text3); margin-bottom: 8px; }
+
+/* ── RADIO / PKG ── */
+.rg { display: flex; gap: 8px; margin-top: 6px; }
+.rl {
+  flex: 1;
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 11px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--text);
+  transition: all .2s;
+}
+.rl:hover { border-color: var(--primary); }
+.rl.sel { border-color: var(--primary); background: var(--primary-dim); color: var(--primary); font-weight: 600; }
+.rl input { display: none; }
+.pkg-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-top: 6px; }
+.pkg {
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s;
+}
+.pkg:hover { border-color: var(--primary); }
+.pkg.sel { border-color: var(--primary); background: var(--primary-dim); }
+.pkg .py { font-size: 20px; font-weight: 700; font-family: var(--mono); color: var(--text); }
+.pkg.sel .py { color: var(--primary); }
+.pkg .pl { font-size: 10px; color: var(--text3); }
+
+/* ── FORM ── */
+.fl { display: flex; gap: 8px; align-items: flex-end; }
+.fg { flex: 1; }
+.flabel { font-size: 11px; font-weight: 600; color: var(--text2); margin-bottom: 5px; display: block; }
+.finput {
+  width: 100%;
+  padding: 8px 11px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-sm);
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text);
+  background: var(--surface);
+  transition: border .2s;
+  outline: none;
+}
+.finput:focus { border-color: var(--accent); }
+
+/* ── BUTTONS ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 18px;
+  border-radius: var(--r-sm);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--sans);
+  cursor: pointer;
+  border: none;
+  transition: all .2s;
+}
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-light); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(15,76,129,.3); }
+.btn-primary:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
+.btn-outline { background: transparent; color: var(--primary); border: 1.5px solid var(--primary); }
+.btn-outline:hover { background: var(--primary); color: #fff; }
+.btn-sm { padding: 6px 13px; font-size: 12px; }
+.btn-full { width: 100%; }
+
+/* ── STICKY SIDEBAR ── */
+.sticky-panel { position: sticky; top: 72px; }
+
+/* ── CHECKLIST ── */
+.chk { display: flex; flex-direction: column; gap: 7px; }
+.ci2 {
+  display: flex; align-items: flex-start; gap: 9px;
+  padding: 9px 11px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  background: var(--surface2);
+}
+.ci2.pass { border-color: var(--success-border); background: var(--success-bg); }
+.ci2.fail { border-color: var(--danger-border); background: var(--danger-bg); }
+.ci2.warn { border-color: var(--warn-border); background: var(--warn-bg); }
+.cbdg {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.pass .cbdg { background: var(--success); color: #fff; }
+.fail .cbdg { background: var(--danger); color: #fff; }
+.warn .cbdg { background: var(--warn); color: #fff; }
+.ci2:not(.pass):not(.fail):not(.warn) .cbdg { background: #cbd5e1; color: var(--text2); }
+.ctt { font-size: 12px; font-weight: 600; }
+.cdt { font-size: 11px; color: var(--text2); margin-top: 2px; line-height: 1.6; }
+
+/* ── SCORE ── */
+.score-box {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  color: #fff;
+  padding: 18px;
+  border-radius: var(--r-sm);
+  text-align: center;
+  margin-bottom: 14px;
+}
+.score-n { font-size: 38px; font-weight: 700; font-family: var(--mono); line-height: 1; }
+.score-l { font-size: 11px; opacity: .75; margin-top: 3px; }
+.score-bars { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 12px; }
+.sbv { font-size: 18px; font-weight: 700; font-family: var(--mono); }
+.sbl { font-size: 10px; opacity: .7; }
+
+/* ── ALERTS ── */
+.alert {
+  padding: 10px 13px;
+  border-radius: var(--r-sm);
+  font-size: 12px;
+  display: flex; align-items: flex-start; gap: 8px;
+  margin-bottom: 10px;
+}
+.alert-info { background: var(--accent-soft); color: #0369a1; border: 1px solid #bae6fd; }
+.alert-success { background: var(--success-bg); color: #15803d; border: 1px solid var(--success-border); }
+.alert-danger { background: var(--danger-bg); color: #b91c1c; border: 1px solid var(--danger-border); }
+.alert-warn { background: var(--warn-bg); color: #b45309; border: 1px solid var(--warn-border); }
+
+/* ── TABLE ── */
+.dtable { width: 100%; border-collapse: collapse; font-size: 12px; }
+.dtable th {
+  background: var(--bg);
+  padding: 7px 10px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .6px;
+  color: var(--text3);
+  border-bottom: 1px solid var(--border);
+}
+.dtable td { padding: 7px 10px; border-bottom: 1px solid var(--border); }
+.dtable tr:last-child td { border-bottom: none; }
+.dtable tr:hover td { background: var(--surface2); }
+.td-l { color: var(--text2); font-weight: 500; width: 42%; }
+.td-v { font-family: var(--mono); font-size: 11px; }
+
+/* ── TABS ── */
+.tab-bar {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  padding: 0 18px;
+  background: var(--surface2);
+}
+.tab {
+  padding: 10px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text3);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all .2s;
+  white-space: nowrap;
+}
+.tab:hover { color: var(--text); }
+.tab.on { color: var(--primary); border-bottom-color: var(--primary); font-weight: 700; }
+.tc { display: none; padding: 14px 18px; }
+.tc.on { display: block; }
+
+/* ── RUN BAR ── */
+.run-bar {
+  padding: 12px 18px;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--surface2);
+  gap: 10px;
+}
+.run-status { font-size: 11px; color: var(--text3); }
+
+/* ── SPINNER ── */
+.spin {
+  width: 15px; height: 15px;
+  border: 2px solid rgba(255,255,255,.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: rot .6s linear infinite;
+  display: inline-block;
+}
+@keyframes rot { to { transform: rotate(360deg); } }
+
+/* ── EMPTY STATE ── */
+.empty { text-align: center; padding: 30px 20px; color: var(--text3); }
+.empty .ei { font-size: 30px; margin-bottom: 8px; }
+
+/* ── DIVIDER ── */
+.dvd { height: 1px; background: var(--border); margin: 14px 0; }
+
+/* ── BADGE ── */
+.bdg {
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.bdg-ok { background: var(--success-bg); color: var(--success); }
+.bdg-err { background: var(--danger-bg); color: var(--danger); }
+.bdg-warn { background: var(--warn-bg); color: var(--warn); }
+.bdg-info { background: var(--accent-soft); color: #0369a1; }
+.bdg-gray { background: var(--surface2); color: var(--text3); border: 1px solid var(--border); }
+
+/* ── PAGE TRANSITIONS ── */
+.page { display: none; }
+.page.on { display: block; animation: fadein .25s ease; }
+@keyframes fadein { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform: none; } }
+
+/* ── PROGRESS BAR ── */
+.pbar { height: 4px; background: var(--border); border-radius: 2px; margin-top: 10px; overflow: hidden; }
+.pfill { height: 100%; background: var(--accent); border-radius: 2px; transition: width .5s ease; }
+
+/* ── PRINT ── */
+@media print {
+  header, .steps, .sticky-panel, .btn, .run-bar, .tab-bar { display: none !important; }
+  .grid-main { grid-template-columns: 1fr !important; }
+  .card { box-shadow: none !important; border: 1px solid #ccc !important; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-sq">🗂️</div>
+    <span>KIỂM TRA HỒ SƠ CTS</span>
+  </div>
+  <span class="hbadge">Bộ phận Hồ sơ · v2.0</span>
+</header>
+
+<div class="app">
+
+  <!-- STEP NAV -->
+  <div class="steps" id="snav"></div>
+
+  <!-- ════ STEP 1: UPLOAD ════ -->
+  <div id="p1" class="page on">
+    <div class="grid-main">
+      <div>
+
+        <!-- ĐKKD -->
+        <div class="card">
+          <div class="ch">
+            <div class="ci" style="background:#dbeafe">🏢</div>
+            <div><h3>Giấy Đăng ký Kinh doanh (ĐKKD)</h3><p>PDF hoặc ảnh scan rõ nét</p></div>
+          </div>
+          <div class="cb">
+            <div class="uz" id="z-dkkd" ondragover="dov(event,'z-dkkd')" ondragleave="dlv('z-dkkd')" ondrop="ddf(event,'dkkd')">
+              <input type="file" id="f-dkkd" accept=".pdf,.jpg,.jpeg,.png" onchange="hf('dkkd',this)">
+              <div class="uz-ico">📄</div>
+              <div class="uz-lbl">Kéo thả hoặc nhấn chọn file</div>
+              <div class="uz-hint">PDF, JPG, PNG · Tối đa 10MB</div>
+              <div id="ft-dkkd" style="display:none" class="ftag">✓ <span id="fn-dkkd"></span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CCCD -->
+        <div class="card">
+          <div class="ch">
+            <div class="ci" style="background:#fce7f3">🪪</div>
+            <div><h3>Căn cước công dân (CCCD)</h3><p>Ảnh 2 mặt CCCD người đại diện</p></div>
+          </div>
+          <div class="cb">
+            <div class="g2">
+              <div>
+                <div class="stitle">Mặt trước</div>
+                <div class="uz" id="z-cccd-front" ondragover="dov(event,'z-cccd-front')" ondragleave="dlv('z-cccd-front')" ondrop="ddf(event,'cccd-front')">
+                  <input type="file" id="f-cccd-front" accept=".jpg,.jpeg,.png,.pdf" onchange="hf('cccd-front',this)">
+                  <div class="uz-ico">🖼️</div>
+                  <div class="uz-lbl">Mặt trước</div>
+                  <div class="uz-hint">JPG, PNG, PDF</div>
+                  <div id="ft-cccd-front" style="display:none" class="ftag">✓ <span id="fn-cccd-front"></span></div>
+                </div>
+              </div>
+              <div>
+                <div class="stitle">Mặt sau</div>
+                <div class="uz" id="z-cccd-back" ondragover="dov(event,'z-cccd-back')" ondragleave="dlv('z-cccd-back')" ondrop="ddf(event,'cccd-back')">
+                  <input type="file" id="f-cccd-back" accept=".jpg,.jpeg,.png,.pdf" onchange="hf('cccd-back',this)">
+                  <div class="uz-ico">🖼️</div>
+                  <div class="uz-lbl">Mặt sau</div>
+                  <div class="uz-hint">JPG, PNG, PDF</div>
+                  <div id="ft-cccd-back" style="display:none" class="ftag">✓ <span id="fn-cccd-back"></span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTS -->
+        <div class="card">
+          <div class="ch">
+            <div class="ci" style="background:#dcfce7">🔐</div>
+            <div><h3>Giấy Đăng ký Chứng thư số (CTS)</h3><p>Phiếu yêu cầu chữ ký số (ONE-CA, VNPT, Viettel…)</p></div>
+          </div>
+          <div class="cb">
+            <div class="uz" id="z-cts" ondragover="dov(event,'z-cts')" ondragleave="dlv('z-cts')" ondrop="ddf(event,'cts')">
+              <input type="file" id="f-cts" accept=".pdf,.jpg,.jpeg,.png" onchange="hf('cts',this)">
+              <div class="uz-ico">📋</div>
+              <div class="uz-lbl">Kéo thả hoặc nhấn chọn file</div>
+              <div class="uz-hint">PDF, JPG, PNG · Tối đa 10MB</div>
+              <div id="ft-cts" style="display:none" class="ftag">✓ <span id="fn-cts"></span></div>
+            </div>
+            <div style="margin-top:12px">
+              <label class="flabel">Loại hồ sơ CTS</label>
+              <div class="rg">
+                <label class="rl" id="rl-moi" onclick="setCts('moi')">
+                  <input type="radio" name="ct" value="moi"> 🆕 Thêm mới
+                </label>
+                <label class="rl" id="rl-giahan" onclick="setCts('giahan')">
+                  <input type="radio" name="ct" value="giahan"> 🔄 Gia hạn
+                </label>
+              </div>
+            </div>
+            <div style="margin-top:12px">
+              <label class="flabel">Gói thời hạn yêu cầu</label>
+              <div class="pkg-grid">
+                <div class="pkg" id="pk-1" onclick="setPkg(1)"><div class="py">1</div><div class="pl">Năm</div></div>
+                <div class="pkg" id="pk-2" onclick="setPkg(2)"><div class="py">2</div><div class="pl">Năm</div></div>
+                <div class="pkg" id="pk-3" onclick="setPkg(3)"><div class="py">3</div><div class="pl">Năm</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MST -->
+        <div class="card card-last">
+          <div class="ch">
+            <div class="ci" style="background:#fef9c3">🔍</div>
+            <div><h3>Tra cứu Mã số thuế (Tùy chọn)</h3><p>Xác minh thông tin DN qua API thuế</p></div>
+          </div>
+          <div class="cb">
+            <div class="fl">
+              <div class="fg">
+                <label class="flabel">Mã số thuế doanh nghiệp</label>
+                <input type="text" class="finput" id="mst-inp" placeholder="VD: 0402102805" maxlength="14">
+              </div>
+              <button class="btn btn-outline btn-sm" onclick="lookupMST()">🔍 Tra cứu</button>
+            </div>
+            <div id="mst-res" style="margin-top:10px"></div>
+          </div>
+        </div>
+
+      </div><!-- /left col -->
+
+      <!-- SIDEBAR -->
+      <div class="sticky-panel">
+        <div class="card">
+          <div class="ch">
+            <div class="ci" style="background:#f3e8ff">📌</div>
+            <h3>Hướng dẫn & Checklist</h3>
+          </div>
+          <div class="cb">
+            <div class="alert alert-info">ℹ️ Upload đủ 3 loại tài liệu để kiểm tra chéo toàn bộ hồ sơ.</div>
+            <div class="stitle">Tài liệu cần có</div>
+            <div class="chk">
+              <div class="ci2" id="req-dkkd">
+                <div class="cbdg">–</div>
+                <div><div class="ctt">Giấy ĐKKD</div><div class="cdt">PDF hoặc ảnh scan rõ nét</div></div>
+              </div>
+              <div class="ci2" id="req-cccd">
+                <div class="cbdg">–</div>
+                <div><div class="ctt">CCCD 2 mặt</div><div class="cdt">Ảnh chụp không bị mờ/nghiêng</div></div>
+              </div>
+              <div class="ci2" id="req-cts">
+                <div class="cbdg">–</div>
+                <div><div class="ctt">Giấy ĐK Chứng thư số</div><div class="cdt">Có ghi rõ loại gói và thời hạn</div></div>
+              </div>
+            </div>
+            <div class="dvd"></div>
+            <div class="stitle">Điểm kiểm tra tự động</div>
+            <div style="font-size:11px;color:var(--text2);line-height:2">
+              ✦ NĐD trên ĐKKD = Họ tên CCCD<br>
+              ✦ Số CCCD trên ĐKKD = CCCD thực<br>
+              ✦ Tên DN trên thuế = ĐKKD<br>
+              ✦ Thông tin CTS khớp ĐKKD & CCCD<br>
+              ✦ Gói CTS đúng loại (mới / gia hạn)<br>
+              ✦ Thời hạn CTS (1 / 2 / 3 năm)<br>
+              ✦ <strong>Kiểm tra hạn CTS còn hay hết</strong>
+            </div>
+            <div class="dvd"></div>
+            <button class="btn btn-primary btn-full" id="btn-go" onclick="goStep(2)" disabled>
+              🚀 Bắt đầu phân tích
+            </button>
+            <p style="font-size:11px;color:var(--text3);text-align:center;margin-top:6px">Cần ít nhất 1 tài liệu để tiếp tục</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════ STEP 2: EXTRACT ════ -->
+  <div id="p2" class="page">
+    <div class="card">
+      <div class="ch">
+        <div class="ci" style="background:#dbeafe">🤖</div>
+        <div><h3>Trích xuất dữ liệu bằng AI</h3><p>Đọc và nhận dạng thông tin từ tài liệu</p></div>
+      </div>
+      <div class="tab-bar">
+        <div class="tab on" onclick="swTab(0)">📄 ĐKKD</div>
+        <div class="tab" onclick="swTab(1)">🪪 CCCD</div>
+        <div class="tab" onclick="swTab(2)">🔐 CTS</div>
+      </div>
+      <div id="tc0" class="tc on"><div class="empty"><div class="ei">📄</div>Chưa upload file ĐKKD</div></div>
+      <div id="tc1" class="tc"><div class="empty"><div class="ei">🪪</div>Chưa upload ảnh CCCD</div></div>
+      <div id="tc2" class="tc"><div class="empty"><div class="ei">🔐</div>Chưa upload file CTS</div></div>
+      <div class="run-bar">
+        <span class="run-status" id="ext-st">Sẵn sàng phân tích</span>
+        <button class="btn btn-primary" id="btn-run" onclick="runExtract()">▶ Chạy trích xuất</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ STEP 3: CROSS CHECK ════ -->
+  <div id="p3" class="page">
+    <div class="grid-main">
+      <div id="p3-left">
+        <div class="empty"><div class="ei">🔄</div>Chưa có dữ liệu đối chiếu</div>
+      </div>
+      <div class="sticky-panel">
+        <div class="card">
+          <div class="ch"><div class="ci" style="background:#f0fdf4">📊</div><h3>Tổng hợp đối chiếu</h3></div>
+          <div class="cb">
+            <div id="sum-score"><div class="empty" style="padding:16px">Chưa có kết quả</div></div>
+            <button class="btn btn-primary btn-full" onclick="goStep(4)">📋 Xem kết quả cuối →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ STEP 4: RESULT ════ -->
+  <div id="p4" class="page">
+    <div class="grid-main">
+      <div id="p4-main">
+        <div class="empty"><div class="ei">📋</div>Chưa có kết quả kiểm tra</div>
+      </div>
+      <div class="sticky-panel">
+        <div class="card">
+          <div class="ch"><div class="ci" style="background:#dbeafe">⚡</div><h3>Hành động</h3></div>
+          <div class="cb" style="display:flex;flex-direction:column;gap:8px">
+            <button class="btn btn-outline btn-full" onclick="window.print()">🖨️ In báo cáo</button>
+            <button class="btn btn-outline btn-full" onclick="exportPDF()">📥 Xuất PDF</button>
+            <div class="dvd"></div>
+            <button class="btn btn-primary btn-full" onclick="resetAll()">🔄 Kiểm tra hồ sơ mới</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<script>
+// ══════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════
+const S = {
+  files: { dkkd: null, 'cccd-front': null, 'cccd-back': null, cts: null },
+  ctsType: null,
+  ctsPkg: null,
+  extracted: { dkkd: null, cccd: null, cts: null },
+  mstData: null,
+  step: 1
+};
+
+// ══════════════════════════════════════════
+//  NAV
+// ══════════════════════════════════════════
+const STEPS = [
+  ['1','Upload tài liệu'],
+  ['2','Trích xuất AI'],
+  ['3','Đối chiếu'],
+  ['4','Kết quả']
+];
+
+function renderNav() {
+  document.getElementById('snav').innerHTML = STEPS.map(([n,l], i) => {
+    const num = i + 1;
+    const cls = num === S.step ? 'si active' : num < S.step ? 'si done' : 'si';
+    const badge = num < S.step ? '✓' : n;
+    const sep = i < 3 ? '<span class="ssep">›</span>' : '';
+    return `<div class="${cls}" onclick="goStep(${num})">
+      <div class="snum">${badge}</div>
+      <div class="slabel">${l}</div>
+    </div>${sep}`;
+  }).join('');
+}
+
+function goStep(n) {
+  if (n > 1 && !anyFile()) return;
+  S.step = n;
+  document.querySelectorAll('.page').forEach((el, i) => {
+    el.className = 'page' + (i + 1 === n ? ' on' : '');
+  });
+  renderNav();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ══════════════════════════════════════════
+//  FILE HANDLING
+// ══════════════════════════════════════════
+function anyFile() {
+  return S.files.dkkd || S.files['cccd-front'] || S.files['cccd-back'] || S.files.cts;
+}
+
+function hf(key, inp) {
+  const f = inp.files[0];
+  if (!f) return;
+  S.files[key] = f;
+  document.getElementById('z-' + key).classList.add('ok');
+  const nm = f.name.length > 26 ? f.name.substr(0, 23) + '...' : f.name;
+  document.getElementById('fn-' + key).textContent = nm;
+  document.getElementById('ft-' + key).style.display = 'inline-flex';
+  updateReqs();
+  document.getElementById('btn-go').disabled = !anyFile();
+}
+
+function dov(e, id) { e.preventDefault(); document.getElementById(id).classList.add('drag'); }
+function dlv(id) { document.getElementById(id).classList.remove('drag'); }
+function ddf(e, key) {
+  e.preventDefault(); dlv('z-' + key);
+  const f = e.dataTransfer.files[0];
+  if (!f) return;
+  S.files[key] = f;
+  document.getElementById('z-' + key).classList.add('ok');
+  const nm = f.name.length > 26 ? f.name.substr(0, 23) + '...' : f.name;
+  document.getElementById('fn-' + key).textContent = nm;
+  document.getElementById('ft-' + key).style.display = 'inline-flex';
+  updateReqs();
+  document.getElementById('btn-go').disabled = false;
+}
+
+function updateReqs() {
+  setReq('req-dkkd', !!S.files.dkkd);
+  setReq('req-cccd', !!(S.files['cccd-front'] || S.files['cccd-back']));
+  setReq('req-cts', !!S.files.cts);
+}
+
+function setReq(id, ok) {
+  const el = document.getElementById(id);
+  el.className = 'ci2' + (ok ? ' pass' : '');
+  el.querySelector('.cbdg').textContent = ok ? '✓' : '–';
+}
+
+function setCts(t) {
+  S.ctsType = t;
+  ['moi', 'giahan'].forEach(v => {
+    document.getElementById('rl-' + v).className = 'rl' + (v === t ? ' sel' : '');
+  });
+}
+
+function setPkg(n) {
+  S.ctsPkg = n;
+  [1, 2, 3].forEach(i => {
+    document.getElementById('pk-' + i).className = 'pkg' + (i === n ? ' sel' : '');
+  });
+}
+
+// ══════════════════════════════════════════
+//  TABS (step 2)
+// ══════════════════════════════════════════
+function swTab(idx) {
+  document.querySelectorAll('.tab').forEach((t, i) => t.className = 'tab' + (i === idx ? ' on' : ''));
+  [0, 1, 2].forEach(i => {
+    document.getElementById('tc' + i).className = 'tc' + (i === idx ? ' on' : '');
+  });
+}
+
+// ══════════════════════════════════════════
+//  AI HELPERS
+// ══════════════════════════════════════════
+async function f2b64(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => res(r.result.split(',')[1]);
+    r.onerror = () => rej(new Error('Đọc file thất bại'));
+    r.readAsDataURL(file);
+  });
+}
+
+async function buildParts(file) {
+  const b64 = await f2b64(file);
+  if (file.type.startsWith('image/'))
+    return [{ type: 'image', source: { type: 'base64', media_type: file.type, data: b64 } }];
+  return [{ type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: b64 } }];
+}
+
+async function callAI(messages) {
+  const r = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      messages
+    })
+  });
+  if (!r.ok) throw new Error(`API lỗi: ${r.status}`);
+  const d = await r.json();
+  return d.content.map(b => b.text || '').join('');
+}
+
+function parseJSON(raw) {
+  return JSON.parse(raw.replace(/```json\n?|```\n?/g, '').trim());
+}
+
+// ══════════════════════════════════════════
+//  EXTRACTION
+// ══════════════════════════════════════════
+function mkTable(data, labels) {
+  const rows = Object.entries(labels).map(([k, l]) =>
+    `<tr><td class="td-l">${l}</td><td class="td-v">${data[k] || '—'}</td></tr>`
+  ).join('');
+  return `<table class="dtable">
+    <thead><tr><th>Trường</th><th>Giá trị trích xuất</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+async function runExtract() {
+  const btn = document.getElementById('btn-run');
+  btn.innerHTML = '<span class="spin"></span> Đang xử lý...';
+  btn.disabled = true;
+  document.getElementById('ext-st').textContent = 'Đang phân tích tài liệu...';
+
+  // ── ĐKKD ──
+  if (S.files.dkkd) {
+    document.getElementById('tc0').innerHTML = `<div class="empty"><div class="ei">⏳</div>Đang đọc ĐKKD...<div class="pbar"><div class="pfill" id="pr0" style="width:30%"></div></div></div>`;
+    try {
+      const parts = await buildParts(S.files.dkkd);
+      const txt = await callAI([{
+        role: 'user',
+        content: [
+          ...parts,
+          { type: 'text', text: `Đây là Giấy đăng ký kinh doanh Việt Nam. Trích xuất và trả về JSON thuần (không markdown, không backtick):
+{"ten_cong_ty":"","ma_so_thue":"","dia_chi":"","nguoi_dai_dien":"","so_cccd_nguoi_dd":"","chuc_danh":"","ngay_cap_dkkd":"","von_dieu_le":"","nganh_nghe_chinh":""}
+Nếu không rõ trường nào, để "".` }
+        ]
+      }]);
+      S.extracted.dkkd = parseJSON(txt);
+      if (S.extracted.dkkd.ma_so_thue)
+        document.getElementById('mst-inp').value = S.extracted.dkkd.ma_so_thue;
+      document.getElementById('tc0').innerHTML = mkTable(S.extracted.dkkd, {
+        ten_cong_ty: 'Tên công ty',
+        ma_so_thue: 'Mã số thuế',
+        dia_chi: 'Địa chỉ',
+        nguoi_dai_dien: 'Người đại diện',
+        so_cccd_nguoi_dd: 'Số CCCD NĐD',
+        chuc_danh: 'Chức danh',
+        ngay_cap_dkkd: 'Ngày cấp ĐKKD',
+        von_dieu_le: 'Vốn điều lệ',
+        nganh_nghe_chinh: 'Ngành nghề chính'
+      });
+    } catch (e) {
+      document.getElementById('tc0').innerHTML = `<div class="alert alert-danger">⚠️ Lỗi đọc ĐKKD: ${e.message}</div>`;
+    }
+  }
+
+  // ── CCCD ──
+  if (S.files['cccd-front'] || S.files['cccd-back']) {
+    document.getElementById('tc1').innerHTML = `<div class="empty"><div class="ei">⏳</div>Đang đọc CCCD...<div class="pbar"><div class="pfill" id="pr1" style="width:30%"></div></div></div>`;
+    try {
+      const parts = [];
+      if (S.files['cccd-front']) { const p = await buildParts(S.files['cccd-front']); parts.push(...p); }
+      if (S.files['cccd-back'])  { const p = await buildParts(S.files['cccd-back']);  parts.push(...p); }
+      const txt = await callAI([{
+        role: 'user',
+        content: [
+          ...parts,
+          { type: 'text', text: `Đây là ảnh Căn cước công dân (CCCD) Việt Nam. Trả về JSON thuần (không markdown):
+{"ho_ten":"","so_cccd":"","ngay_sinh":"","gioi_tinh":"","dia_chi_thuong_tru":"","ngay_cap":"","ngay_het_han":"","que_quan":""}
+Nếu không rõ để "".` }
+        ]
+      }]);
+      S.extracted.cccd = parseJSON(txt);
+      document.getElementById('tc1').innerHTML = mkTable(S.extracted.cccd, {
+        ho_ten: 'Họ tên',
+        so_cccd: 'Số CCCD',
+        ngay_sinh: 'Ngày sinh',
+        gioi_tinh: 'Giới tính',
+        dia_chi_thuong_tru: 'Địa chỉ thường trú',
+        ngay_cap: 'Ngày cấp',
+        ngay_het_han: 'Ngày hết hạn',
+        que_quan: 'Quê quán'
+      });
+    } catch (e) {
+      document.getElementById('tc1').innerHTML = `<div class="alert alert-danger">⚠️ Lỗi đọc CCCD: ${e.message}</div>`;
+    }
+  }
+
+  // ── CTS ──
+  if (S.files.cts) {
+    document.getElementById('tc2').innerHTML = `<div class="empty"><div class="ei">⏳</div>Đang đọc CTS...<div class="pbar"><div class="pfill" id="pr2" style="width:30%"></div></div></div>`;
+    try {
+      const parts = await buildParts(S.files.cts);
+      const txt = await callAI([{
+        role: 'user',
+        content: [
+          ...parts,
+          { type: 'text', text: `Đây là Phiếu yêu cầu / Giấy đăng ký chứng thư số / chữ ký số Việt Nam (ONE-CA, VNPT-CA, Viettel-CA, FPT-CA, BKAV-CA...).
+Trích xuất và trả về JSON thuần (không markdown, không backtick):
+{
+  "ten_to_chuc":"",
+  "ma_so_thue":"",
+  "nguoi_dai_dien":"",
+  "so_cccd":"",
+  "goi_thoi_han":"",
+  "loai_ho_so":"",
+  "loai_thiet_bi":"",
+  "ngay_hieu_luc":"",
+  "ngay_het_han":"",
+  "don_vi_cap":""
+}
+Lưu ý: "goi_thoi_han" chỉ điền số năm (1, 2 hoặc 3).
+"loai_ho_so": "Thêm mới" hoặc "Gia hạn".
+"loai_thiet_bi": "USB Token" hoặc "HSM".
+"ngay_het_han": nếu không in sẵn trên giấy, hãy tính từ ngày ký + gói năm (nếu thấy chữ ký số có ngày ký).
+Để "" nếu không rõ.` }
+        ]
+      }]);
+      S.extracted.cts = parseJSON(txt);
+      document.getElementById('tc2').innerHTML = mkTable(S.extracted.cts, {
+        ten_to_chuc: 'Tên tổ chức',
+        ma_so_thue: 'Mã số thuế',
+        nguoi_dai_dien: 'Người đại diện',
+        so_cccd: 'Số CCCD',
+        goi_thoi_han: 'Gói thời hạn (năm)',
+        loai_ho_so: 'Loại hồ sơ',
+        loai_thiet_bi: 'Loại thiết bị',
+        ngay_hieu_luc: 'Ngày hiệu lực',
+        ngay_het_han: 'Ngày hết hạn',
+        don_vi_cap: 'Đơn vị cấp'
+      });
+    } catch (e) {
+      document.getElementById('tc2').innerHTML = `<div class="alert alert-danger">⚠️ Lỗi đọc CTS: ${e.message}</div>`;
+    }
+  }
+
+  document.getElementById('ext-st').textContent = 'Trích xuất hoàn tất! ✓';
+  btn.innerHTML = '✓ Xong → Đối chiếu';
+  btn.disabled = false;
+  btn.onclick = () => { runCrossCheck(); goStep(3); };
+}
+
+// ══════════════════════════════════════════
+//  MST LOOKUP
+// ══════════════════════════════════════════
+async function lookupMST() {
+  const mst = document.getElementById('mst-inp').value.trim();
+  if (!mst) { alert('Vui lòng nhập mã số thuế!'); return; }
+  const res = document.getElementById('mst-res');
+  res.innerHTML = `<div class="alert alert-info">⏳ Đang tra cứu MST <strong>${mst}</strong>...</div>`;
+  try {
+    const r = await fetch(`https://api.vietqr.io/v2/business/${mst}`);
+    const d = await r.json();
+    if (d.code === '00' && d.data) {
+      S.mstData = d.data;
+      res.innerHTML = `<div class="alert alert-success">✅ Tìm thấy thông tin doanh nghiệp</div>
+        <table class="dtable" style="margin-top:6px">
+          <tr><td class="td-l">Tên DN</td><td class="td-v">${d.data.name || '—'}</td></tr>
+          <tr><td class="td-l">Địa chỉ</td><td class="td-v">${d.data.address || '—'}</td></tr>
+          <tr><td class="td-l">Trạng thái</td><td class="td-v">${d.data.status || '—'}</td></tr>
+        </table>`;
+    } else {
+      res.innerHTML = `<div class="alert alert-danger">⚠️ Không tìm thấy MST <strong>${mst}</strong>. Kiểm tra lại số.</div>`;
+    }
+  } catch (e) {
+    res.innerHTML = `<div class="alert alert-danger">⚠️ Lỗi kết nối API tra cứu MST. Thử lại sau.</div>`;
+  }
+}
+
+// ══════════════════════════════════════════
+//  NORMALIZE
+// ══════════════════════════════════════════
+function norm(s) {
+  if (!s) return '';
+  return s.toString().toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd').replace(/Đ/g, 'd')
+    .replace(/[^a-z0-9]/g, '').trim();
+}
+
+// ══════════════════════════════════════════
+//  CROSS CHECK
+// ══════════════════════════════════════════
+function ciHtml(cls, icon, title, detail) {
+  return `<div class="ci2 ${cls}" style="margin-bottom:8px">
+    <div class="cbdg">${icon}</div>
+    <div><div class="ctt">${title}</div><div class="cdt">${detail}</div></div>
+  </div>`;
+}
+
+function checkDateExpiry(dateStr) {
+  // Returns { expired, daysLeft, display }
+  if (!dateStr) return null;
+  try {
+    let d;
+    // Formats: DD/MM/YYYY or YYYY-MM-DD or DD-MM-YYYY
+    const parts = dateStr.replace(/\//g, '-').split('-');
+    if (parts.length === 3) {
+      if (parts[0].length === 4) {
+        d = new Date(dateStr.replace(/\//g, '-'));
+      } else {
+        d = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+      }
+    }
+    if (!d || isNaN(d)) return null;
+    const now = new Date();
+    const diff = Math.round((d - now) / (1000 * 60 * 60 * 24));
+    return { expired: diff < 0, expiringSoon: diff >= 0 && diff <= 30, daysLeft: diff, date: dateStr };
+  } catch (e) { return null; }
+}
+
+function runCrossCheck() {
+  const dkkd = S.extracted.dkkd;
+  const cccd = S.extracted.cccd;
+  const cts  = S.extracted.cts;
+  let html = '';
+
+  // ── ĐKKD vs CCCD ──
+  html += `<div class="card" style="margin-bottom:16px">
+    <div class="ch"><div class="ci" style="background:#dbeafe">🔄</div><div><h3>Đối chiếu ĐKKD ↔ CCCD</h3></div></div>
+    <div class="cb">`;
+  if (dkkd && cccd) {
+    const nmMatch = norm(dkkd.nguoi_dai_dien) === norm(cccd.ho_ten);
+    const ccMatch = dkkd.so_cccd_nguoi_dd && cccd.so_cccd
+      ? norm(dkkd.so_cccd_nguoi_dd) === norm(cccd.so_cccd) : null;
+
+    html += ciHtml(
+      nmMatch ? 'pass' : 'fail',
+      nmMatch ? '✓' : '✗',
+      'Họ tên Người đại diện',
+      `ĐKKD: <strong>${dkkd.nguoi_dai_dien || '—'}</strong><br>
+       CCCD: <strong>${cccd.ho_ten || '—'}</strong><br>
+       → ${nmMatch
+         ? '<span style="color:var(--success)">✓ Trùng khớp</span>'
+         : '<span style="color:var(--danger)">✗ Không khớp — Kiểm tra lại</span>'}`
+    );
+
+    if (ccMatch !== null) {
+      html += ciHtml(
+        ccMatch ? 'pass' : 'fail',
+        ccMatch ? '✓' : '✗',
+        'Số CCCD',
+        `ĐKKD ghi: <strong>${dkkd.so_cccd_nguoi_dd || '—'}</strong><br>
+         CCCD thực: <strong>${cccd.so_cccd || '—'}</strong><br>
+         → ${ccMatch
+           ? '<span style="color:var(--success)">✓ Trùng khớp</span>'
+           : '<span style="color:var(--danger)">✗ Không khớp</span>'}`
+      );
+    } else {
+      html += ciHtml('warn', '?', 'Số CCCD', 'Thiếu số CCCD trên ĐKKD hoặc CCCD — không thể đối chiếu.');
+    }
+
+    // Hạn CCCD
+    if (cccd.ngay_het_han) {
+      const exp = checkDateExpiry(cccd.ngay_het_han);
+      if (exp) {
+        if (exp.expired) {
+          html += ciHtml('fail', '✗', 'Hạn CCCD',
+            `<span style="color:var(--danger)">⚠️ CCCD đã hết hạn: ${exp.date}</span> — Cần cập nhật CCCD mới!`);
+        } else if (exp.expiringSoon) {
+          html += ciHtml('warn', '!', 'Hạn CCCD',
+            `<span style="color:var(--warn)">Sắp hết hạn: ${exp.date} (còn ${exp.daysLeft} ngày)</span>`);
+        } else {
+          html += ciHtml('pass', '✓', 'Hạn CCCD',
+            `<span style="color:var(--success)">Còn hạn đến ${exp.date}</span>`);
+        }
+      }
+    }
+  } else {
+    html += `<div class="alert alert-info">ℹ️ Cần upload cả ĐKKD và CCCD để đối chiếu.</div>`;
+  }
+  html += `</div></div>`;
+
+  // ── MST ──
+  html += `<div class="card" style="margin-bottom:16px">
+    <div class="ch"><div class="ci" style="background:#fef9c3">🏛️</div><div><h3>Đối chiếu Mã số thuế (Cục thuế)</h3></div></div>
+    <div class="cb">`;
+  if (S.mstData && dkkd) {
+    const nmM = norm(S.mstData.name) === norm(dkkd.ten_cong_ty);
+    html += ciHtml(
+      nmM ? 'pass' : 'warn', nmM ? '✓' : '?',
+      'Tên DN trên thuế ↔ ĐKKD',
+      `Thuế: <strong>${S.mstData.name || '—'}</strong><br>ĐKKD: <strong>${dkkd.ten_cong_ty || '—'}</strong>`
+    );
+    html += ciHtml('pass', 'i', 'Trạng thái MST', `${S.mstData.status || '—'}`);
+    html += ciHtml('pass', 'i', 'Địa chỉ (thuế)', `${S.mstData.address || '—'}`);
+  } else if (!S.mstData && dkkd && dkkd.ma_so_thue) {
+    html += `<div class="alert alert-warn">⚠️ Có MST <strong>${dkkd.ma_so_thue}</strong> trích xuất từ ĐKKD nhưng chưa tra cứu. <button class="btn btn-outline btn-sm" onclick="document.getElementById('mst-inp').value='${dkkd.ma_so_thue}';lookupMST()">Tra cứu ngay</button></div>`;
+  } else {
+    html += `<div class="alert alert-info">ℹ️ Vui lòng tra cứu MST ở Bước 1 để đối chiếu.</div>`;
+  }
+  html += `</div></div>`;
+
+  // ── CTS ──
+  html += `<div class="card" style="margin-bottom:16px">
+    <div class="ch"><div class="ci" style="background:#dcfce7">✅</div><div><h3>Kiểm tra Chứng thư số</h3></div></div>
+    <div class="cb">`;
+  if (cts) {
+    // Kiểm tra hạn CTS
+    if (cts.ngay_het_han) {
+      const exp = checkDateExpiry(cts.ngay_het_han);
+      if (exp) {
+        if (exp.expired) {
+          html += ciHtml('fail', '✗', '🔴 Hạn chứng thư số',
+            `<span style="color:var(--danger)"><strong>CTS ĐÃ HẾT HẠN: ${exp.date}</strong></span> — Cần gia hạn ngay!`);
+        } else if (exp.expiringSoon) {
+          html += ciHtml('warn', '!', '🟡 Hạn chứng thư số',
+            `<span style="color:var(--warn)">Sắp hết hạn: ${exp.date} (còn <strong>${exp.daysLeft} ngày</strong>)</span> — Cần gia hạn sớm.`);
+        } else {
+          html += ciHtml('pass', '✓', '🟢 Hạn chứng thư số',
+            `<span style="color:var(--success)">Còn hạn đến <strong>${exp.date}</strong> (còn ${exp.daysLeft} ngày)</span>`);
+        }
+      } else {
+        html += ciHtml('warn', '?', 'Hạn chứng thư số', `Không phân tích được ngày: <strong>${cts.ngay_het_han}</strong>`);
+      }
+    } else {
+      html += ciHtml('warn', '?', 'Hạn chứng thư số', 'Không tìm thấy ngày hết hạn trên giấy CTS');
+    }
+
+    // Tên tổ chức CTS vs ĐKKD
+    if (dkkd && cts.ten_to_chuc) {
+      const m = norm(cts.ten_to_chuc) === norm(dkkd.ten_cong_ty);
+      html += ciHtml(m ? 'pass' : 'fail', m ? '✓' : '✗',
+        'Tên tổ chức CTS ↔ ĐKKD',
+        `CTS: <strong>${cts.ten_to_chuc}</strong><br>ĐKKD: <strong>${dkkd.ten_cong_ty || '—'}</strong>`);
+    }
+
+    // Người đại diện CTS vs ĐKKD
+    if (dkkd && cts.nguoi_dai_dien) {
+      const m = norm(cts.nguoi_dai_dien) === norm(dkkd.nguoi_dai_dien);
+      html += ciHtml(m ? 'pass' : 'fail', m ? '✓' : '✗',
+        'Người đại diện CTS ↔ ĐKKD',
+        `CTS: <strong>${cts.nguoi_dai_dien}</strong> · ĐKKD: <strong>${dkkd.nguoi_dai_dien || '—'}</strong>`);
+    }
+
+    // CCCD trên CTS vs CCCD thực
+    if (cccd && cts.so_cccd) {
+      const m = norm(cts.so_cccd) === norm(cccd.so_cccd);
+      html += ciHtml(m ? 'pass' : 'fail', m ? '✓' : '✗',
+        'Số CCCD trên CTS ↔ CCCD thực',
+        `CTS: <strong>${cts.so_cccd}</strong> · CCCD: <strong>${cccd.so_cccd || '—'}</strong>`);
+    }
+
+    // MST CTS vs ĐKKD
+    if (dkkd && cts.ma_so_thue) {
+      const m = cts.ma_so_thue.replace(/\D/g, '') === (dkkd.ma_so_thue || '').replace(/\D/g, '');
+      html += ciHtml(m ? 'pass' : 'fail', m ? '✓' : '✗',
+        'MST trên CTS ↔ ĐKKD',
+        `CTS: <strong>${cts.ma_so_thue}</strong> · ĐKKD: <strong>${dkkd.ma_so_thue || '—'}</strong>`);
+    }
+
+    // Gói năm
+    if (cts.goi_thoi_han && S.ctsPkg) {
+      const m = parseInt(cts.goi_thoi_han) === S.ctsPkg;
+      html += ciHtml(m ? 'pass' : 'fail', m ? '✓' : '✗',
+        'Gói thời hạn CTS',
+        `Trên giấy: <strong>${cts.goi_thoi_han} năm</strong> · Yêu cầu: <strong>${S.ctsPkg} năm</strong>`);
+    } else if (cts.goi_thoi_han) {
+      html += ciHtml('warn', 'i', 'Gói thời hạn CTS',
+        `Trên giấy: <strong>${cts.goi_thoi_han} năm</strong> — chưa chọn gói yêu cầu ở Bước 1.`);
+    }
+
+    // Loại hồ sơ
+    if (S.ctsType && cts.loai_ho_so) {
+      const sel = S.ctsType === 'moi' ? 'thêm mới' : 'gia hạn';
+      const m = norm(cts.loai_ho_so).includes(norm(sel));
+      html += ciHtml(m ? 'pass' : 'warn', m ? '✓' : '?',
+        'Loại hồ sơ CTS',
+        `Trên giấy: <strong>${cts.loai_ho_so}</strong> · Yêu cầu: <strong>${S.ctsType === 'moi' ? 'Thêm mới' : 'Gia hạn'}</strong>`);
+    }
+
+    // Loại thiết bị
+    if (cts.loai_thiet_bi) {
+      html += ciHtml('pass', 'i', 'Loại thiết bị', `<strong>${cts.loai_thiet_bi}</strong>`);
+    }
+
+  } else {
+    html += `<div class="alert alert-info">ℹ️ Chưa upload Giấy đăng ký CTS.</div>`;
+  }
+  html += `</div></div>`;
+
+  document.getElementById('p3-left').innerHTML = html;
+  buildSummary();
+  buildFinal();
+}
+
+// ══════════════════════════════════════════
+//  SUMMARY SCORE
+// ══════════════════════════════════════════
+function collectChecks() {
+  const dkkd = S.extracted.dkkd, cccd = S.extracted.cccd, cts = S.extracted.cts;
+  const results = [];
+
+  function add(status, label) { results.push({ status, label }); }
+
+  if (dkkd && cccd) {
+    add(norm(dkkd.nguoi_dai_dien) === norm(cccd.ho_ten) ? 'pass' : 'fail', 'Tên NĐD: ĐKKD ↔ CCCD');
+    if (dkkd.so_cccd_nguoi_dd && cccd.so_cccd)
+      add(norm(dkkd.so_cccd_nguoi_dd) === norm(cccd.so_cccd) ? 'pass' : 'fail', 'Số CCCD: ĐKKD ↔ CCCD');
+    if (cccd.ngay_het_han) {
+      const exp = checkDateExpiry(cccd.ngay_het_han);
+      if (exp) add(exp.expired ? 'fail' : exp.expiringSoon ? 'warn' : 'pass', 'Hạn CCCD');
+    }
+  }
+  if (S.mstData && dkkd) {
+    add(norm(S.mstData.name) === norm(dkkd.ten_cong_ty) ? 'pass' : 'warn', 'Tên DN: Thuế ↔ ĐKKD');
+  }
+  if (cts) {
+    if (cts.ngay_het_han) {
+      const exp = checkDateExpiry(cts.ngay_het_han);
+      if (exp) add(exp.expired ? 'fail' : exp.expiringSoon ? 'warn' : 'pass', 'Hạn CTS');
+    }
+    if (dkkd && cts.ten_to_chuc)
+      add(norm(cts.ten_to_chuc) === norm(dkkd.ten_cong_ty) ? 'pass' : 'fail', 'Tên tổ chức: CTS ↔ ĐKKD');
+    if (dkkd && cts.nguoi_dai_dien)
+      add(norm(cts.nguoi_dai_dien) === norm(dkkd.nguoi_dai_dien) ? 'pass' : 'fail', 'NĐD: CTS ↔ ĐKKD');
+    if (dkkd && cts.ma_so_thue)
+      add(cts.ma_so_thue.replace(/\D/g,'') === (dkkd.ma_so_thue||'').replace(/\D/g,'') ? 'pass' : 'fail', 'MST: CTS ↔ ĐKKD');
+    if (S.ctsPkg && cts.goi_thoi_han)
+      add(parseInt(cts.goi_thoi_han) === S.ctsPkg ? 'pass' : 'fail', `Gói CTS ${S.ctsPkg} năm`);
+  }
+  return results;
+}
+
+function buildSummary() {
+  const results = collectChecks();
+  const pass = results.filter(r => r.status === 'pass').length;
+  const fail = results.filter(r => r.status === 'fail').length;
+  const warn = results.filter(r => r.status === 'warn').length;
+  const total = results.length;
+  const score = total > 0 ? Math.round(pass / total * 100) : 0;
+  const overall = fail > 0 ? 'danger' : warn > 0 ? 'warn' : pass > 0 ? 'success' : 'gray';
+  const msg = fail > 0 ? '⚠️ Có lỗi cần xử lý' : warn > 0 ? '🔶 Cần kiểm tra thêm' : pass > 0 ? '✅ Hồ sơ hợp lệ' : 'Chưa đủ dữ liệu';
+
+  document.getElementById('sum-score').innerHTML = `
+    <div class="score-box">
+      <div class="score-n">${score}%</div>
+      <div class="score-l">Điểm hồ sơ tổng thể</div>
+      <div class="score-bars">
+        <div><div class="sbv">${pass}</div><div class="sbl">✓ Hợp lệ</div></div>
+        <div><div class="sbv">${warn}</div><div class="sbl">! Cảnh báo</div></div>
+        <div><div class="sbv">${fail}</div><div class="sbl">✗ Lỗi</div></div>
+      </div>
+    </div>
+    <div class="alert alert-${overall === 'danger' ? 'danger' : overall === 'warn' ? 'warn' : overall === 'success' ? 'success' : 'info'}" style="justify-content:center;font-weight:600">
+      ${msg}
+    </div>`;
+}
+
+// ══════════════════════════════════════════
+//  FINAL RESULT
+// ══════════════════════════════════════════
+function buildFinal() {
+  const dkkd = S.extracted.dkkd, cccd = S.extracted.cccd, cts = S.extracted.cts;
+  const results = collectChecks();
+  const pass = results.filter(r => r.status === 'pass').length;
+  const fail = results.filter(r => r.status === 'fail').length;
+  const warn = results.filter(r => r.status === 'warn').length;
+  const total = results.length;
+  const score = total > 0 ? Math.round(pass / total * 100) : 0;
+  const allOk = fail === 0 && warn === 0 && pass > 0;
+
+  let html = `
+  <div class="card" style="margin-bottom:16px">
+    <div class="ch">
+      <div class="ci" style="background:${allOk ? '#dcfce7' : '#fef2f2'}">📋</div>
+      <div><h3>Kết quả Kiểm tra Hồ sơ</h3><p>Thời gian: ${new Date().toLocaleString('vi-VN')}</p></div>
+    </div>
+    <div class="cb">
+
+    <div class="alert alert-${allOk ? 'success' : fail > 0 ? 'danger' : 'warn'}" style="font-size:14px;font-weight:700;margin-bottom:16px">
+      ${allOk
+        ? '✅ HỒ SƠ HỢP LỆ — Kiểm tra đạt toàn bộ các tiêu chí.'
+        : fail > 0
+          ? `❌ HỒ SƠ CÓ LỖI — ${fail} lỗi cần xử lý trước khi tiếp nhận.`
+          : `⚠️ CÓ CẢNH BÁO — ${warn} điểm cần kiểm tra thêm.`}
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px">
+      <div style="text-align:center;background:var(--success-bg);border:1px solid var(--success-border);border-radius:var(--r-sm);padding:12px">
+        <div style="font-size:24px;font-weight:700;color:var(--success);font-family:var(--mono)">${pass}</div>
+        <div style="font-size:11px;color:var(--success)">✓ Hợp lệ</div>
+      </div>
+      <div style="text-align:center;background:var(--warn-bg);border:1px solid var(--warn-border);border-radius:var(--r-sm);padding:12px">
+        <div style="font-size:24px;font-weight:700;color:var(--warn);font-family:var(--mono)">${warn}</div>
+        <div style="font-size:11px;color:var(--warn)">! Cảnh báo</div>
+      </div>
+      <div style="text-align:center;background:var(--danger-bg);border:1px solid var(--danger-border);border-radius:var(--r-sm);padding:12px">
+        <div style="font-size:24px;font-weight:700;color:var(--danger);font-family:var(--mono)">${fail}</div>
+        <div style="font-size:11px;color:var(--danger)">✗ Lỗi</div>
+      </div>
+    </div>`;
+
+  // Checklist kết quả
+  html += `<div class="stitle">Chi tiết các điểm kiểm tra</div><div class="chk" style="margin-bottom:14px">`;
+  results.forEach(r => {
+    html += ciHtml(
+      r.status,
+      r.status === 'pass' ? '✓' : r.status === 'fail' ? '✗' : '!',
+      r.label,
+      r.status === 'pass' ? 'Đạt' : r.status === 'fail' ? 'Không đạt — cần xem lại' : 'Cần kiểm tra thêm'
+    );
+  });
+  html += `</div>`;
+
+  html += `<div class="dvd"></div>`;
+
+  // Bảng thông tin ĐKKD
+  if (dkkd) {
+    html += `<div class="stitle">Thông tin Doanh nghiệp (từ ĐKKD)</div>
+    <table class="dtable" style="margin-bottom:14px">
+      <tr><td class="td-l">Tên công ty</td><td class="td-v">${dkkd.ten_cong_ty || '—'}</td></tr>
+      <tr><td class="td-l">Mã số thuế</td><td class="td-v">${dkkd.ma_so_thue || '—'}</td></tr>
+      <tr><td class="td-l">Người đại diện</td><td class="td-v">${dkkd.nguoi_dai_dien || '—'}</td></tr>
+      <tr><td class="td-l">Chức danh</td><td class="td-v">${dkkd.chuc_danh || '—'}</td></tr>
+      <tr><td class="td-l">Địa chỉ</td><td class="td-v">${dkkd.dia_chi || '—'}</td></tr>
+      <tr><td class="td-l">Vốn điều lệ</td><td class="td-v">${dkkd.von_dieu_le || '—'}</td></tr>
+    </table>`;
+  }
+
+  // Bảng thông tin CTS
+  if (cts) {
+    const exp = cts.ngay_het_han ? checkDateExpiry(cts.ngay_het_han) : null;
+    const hanColor = !exp ? '' : exp.expired ? 'color:var(--danger);font-weight:600' : exp.expiringSoon ? 'color:var(--warn);font-weight:600' : 'color:var(--success)';
+    html += `<div class="stitle">Thông tin Chứng thư số</div>
+    <table class="dtable" style="margin-bottom:14px">
+      <tr><td class="td-l">Đơn vị cấp</td><td class="td-v">${cts.don_vi_cap || '—'}</td></tr>
+      <tr><td class="td-l">Loại hồ sơ</td><td class="td-v">${cts.loai_ho_so || '—'}</td></tr>
+      <tr><td class="td-l">Gói thời hạn</td><td class="td-v">${cts.goi_thoi_han ? cts.goi_thoi_han + ' năm' : '—'}</td></tr>
+      <tr><td class="td-l">Loại thiết bị</td><td class="td-v">${cts.loai_thiet_bi || '—'}</td></tr>
+      <tr><td class="td-l">Ngày hiệu lực</td><td class="td-v">${cts.ngay_hieu_luc || '—'}</td></tr>
+      <tr><td class="td-l">Ngày hết hạn</td><td class="td-v" style="${hanColor}">${cts.ngay_het_han || '—'}${exp ? (exp.expired ? ' ❌ HẾT HẠN' : exp.expiringSoon ? ` ⚠️ (còn ${exp.daysLeft} ngày)` : ` ✓ (còn ${exp.daysLeft} ngày)`) : ''}</td></tr>
+    </table>`;
+  }
+
+  html += `<div class="dvd"></div>
+    <div style="font-size:11px;color:var(--text3)">
+      Kiểm tra lúc: <strong>${new Date().toLocaleString('vi-VN')}</strong> · 
+      Điểm hồ sơ: <strong>${score}%</strong> (${pass}/${total} tiêu chí đạt)
+    </div>
+  </div></div>`;
+
+  document.getElementById('p4-main').innerHTML = html;
+}
+
+// ══════════════════════════════════════════
+//  EXPORT PDF (dùng print)
+// ══════════════════════════════════════════
+function exportPDF() {
+  alert('Sử dụng tính năng "In báo cáo" và chọn "Save as PDF" để xuất file PDF.');
+}
+
+// ══════════════════════════════════════════
+//  RESET
+// ══════════════════════════════════════════
+function resetAll() {
+  if (confirm('Xóa toàn bộ dữ liệu và bắt đầu hồ sơ mới?')) {
+    location.reload();
+  }
+}
+
+// ══════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════
+renderNav();
+</script>
+</body>
+</html>
